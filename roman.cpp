@@ -27,7 +27,7 @@ int main()
 	romanValues['V'] = 5;
 	romanValues['X'] = 10;
 	romanValues['L'] = 50;
-    	romanValues['C'] = 100;
+        romanValues['C'] = 100;
 	romanValues['D'] = 500;
 	romanValues['M'] = 1000;
 
