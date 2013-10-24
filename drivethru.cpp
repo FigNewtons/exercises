@@ -59,7 +59,7 @@ int main()
 	Option clubChicken = {"Club Chicken (Grilled or Cripsy)", 4.29, 5.99}; 
 	Option classic = {"Classic Chicken (Grilled or Cripsy)", 3.99, 5.69}; 
 
-	// Delcare menu 
+	// Declare menu 
 	menu[1] = bigMac;
 	menu[2] = cheeseBurger;
 	menu[3] = qtrPounder;
