@@ -26,6 +26,9 @@ struct Option
 // Create map to pair menu number with food option
 map <int, Option> menu;
 
+// Create map to keep track of user's order
+map <string, int> order;
+
 
 // Template for getting user input
 template <typename T, typename U>
@@ -38,10 +41,21 @@ T getInput(U str)
 	return input;
 }
 
+// Check if key exists in map -- 
+// used to validate user input for option number (map menu)
+// and add new items to receipt (map order)
+template <typename U, typename V>
+bool inMap(U map, V key)
+{
+	if (map.find(key) == map.end())
+		return false;
+	else
+		return true;
+}
+
 // Function prototypes
-void displayMenu(map <int, Option>);
+void displayMenu();
 void displayReceipt(float, float);
-bool isValidOption(int);
 bool isValidChar(char);
 
 
@@ -56,8 +70,8 @@ int main()
 	Option filet = {"Filet-O-Fish", 3.49, 5.19}; 
 	Option dlbCheese = {"Double Cheeseburger", 1.29, 3.69}; 
 	Option chkBLT = {"Chicken Ranch BLT", 4.19, 5.89};
-	Option clubChicken = {"Club Chicken (Grilled or Cripsy)", 4.29, 5.99}; 
-	Option classic = {"Classic Chicken (Grilled or Cripsy)", 3.99, 5.69}; 
+	Option clubChicken = {"Club Chicken", 4.29, 5.99}; 
+	Option classic = {"Classic Chicken", 3.99, 5.69}; 
 
 	// Declare menu 
 	menu[1] = bigMac;
@@ -80,20 +94,40 @@ int main()
 	
 	do
 	{
-		displayMenu(menu);
+		displayMenu();
 		int optionNum = getInput <int, string>("What would you like to order? " + prompt1);
 
-		if(!isValidOption(optionNum))
+		// Checks if user entered in a valid option number 
+		if(!inMap(menu, optionNum))
     		cout << "Invalid option entered.\n";
 		else
 		{
+			// Checks if user has order the same item before and keeps running total
+			if(!inMap(order, menu[optionNum].name))
+				order[menu[optionNum].name] = 1;
+			else
+				order[menu[optionNum].name] +=1;
+
+			// Asks user if they want the meal version
 			char input = getInput <char, string>("Would you like that to be a meal? " + prompt2);
+
 			if(isValidChar(input))
+				{
 				total += menu[optionNum].mealPrice;
+
+				// If user has not ordered same item before -- the key is updated to show meal
+				if(!inMap(order, menu[optionNum].name + "-Meal"))
+					{
+					order.erase(menu[optionNum].name);
+					order[menu[optionNum].name + "-Meal"] = 1;
+					}
+				}
 			else
 				total += menu[optionNum].regPrice;
+
 		}
 
+		// Asks if user is done ordering 
    		char done = getInput <char, string>("Will that be all today? " + prompt2);
 		if(isValidChar(done))
 			isOrderDone = true;
@@ -109,7 +143,7 @@ int main()
 
 
 // Displays menu 
-void displayMenu(map <int, Option>)
+void displayMenu()
 {
 	cout << "------------------------------------------------------\n";
 	cout << "--------------------McDonald's Menu-------------------\n";
@@ -124,24 +158,23 @@ void displayMenu(map <int, Option>)
 	}
 }
 
+//Displays receipt
 void displayReceipt(float total, float tax)
 {
-	cout << showpoint << fixed << setprecision(2);
-	cout << "Subtax:        $" << total << endl;
-	cout << "Tax:           $" << total * tax << endl;
+	cout << "------------------------------------------------------\n";
+	cout << "------------------------Receipt-----------------------\n";
+    cout << "------------------------------------------------------\n";
+
+	// Iterates through order map to print out how many of each item the user ordered
+	for (map<string,int>::iterator it = order.begin(); it!= order.end(); it++)
+		cout << it->first << "(" << it -> second << ")" << endl;
+
+	cout << showpoint << fixed << setprecision(2); 
+	cout << "Subtax:" << setw(10) << "$" << total << endl;
+	cout << "Tax:" << setw(13) << "$" << total * tax << endl;
 	total = total * (1 + tax);
-	cout << "Your total is: $" << total << endl;
+	cout << "Your total is:" << setw(3) << "$" << total << endl;
 	cout << "Please come again!" << endl;
-}
-
-
-// Validates user input for number in correct range
-bool isValidOption(int order) 
-{
-	if(menu.find(order) == menu.end())
-		return false;
-	else
-		return true;
 }
 
 
