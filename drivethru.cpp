@@ -25,6 +25,13 @@ struct Option
 // Create map to pair menu number with food option
 map <int, Option> menu;
 
+// Function prototypes
+void displayMenu(map <int, Option>);
+int getOrder();
+bool isValidOption(int);
+bool orderDone();
+
+
 int main()
 {
 
@@ -51,7 +58,26 @@ int main()
 	menu[9] = classic;
 
 
-	// Display menu
+	// -----Where program starts-----
+	bool isOrderDone = false; 
+	do
+	{
+		displayMenu(menu);
+		int option = getOrder();
+		if(!isValidOption(option))
+			cout << "Invalid option entered.\n";
+		isOrderDone = orderDone();
+	}
+	while(!isOrderDone);
+
+	return 0;
+}
+
+
+
+// Displays menu 
+void displayMenu(map <int, Option>)
+{
 	cout << "------------------------------------------------------\n";
 	cout << "--------------------McDonald's Menu-------------------\n";
 	cout << "------------------------------------------------------\n";
@@ -61,8 +87,38 @@ int main()
 		cout << "   " << menu[i].name << " - Meal" << setw(41- menu[i].name.length()) << "$" << menu[i].mealPrice << endl;
 		
 	}
+}
 
-	return 0;
+// Gets the user's option number
+int getOrder()
+{
+	int order;
+	cout << "What would you like to order? Press a valid option number: ";
+	cin >> order;
+
+	return order;
+}
+
+// Validates user input for number in correct range
+bool isValidOption(int order) 
+{
+	if(menu.find(order) == menu.end())
+		return false;
+	else
+		return true;
+}
+
+bool orderDone()
+{
+	char done;
+	cout << "Will that be all today? Press 'y' for yes or any other character for no: ";
+	cin >> done;
+
+	done = tolower(done);
+	if (done == 'y')
+		return true;
+	else
+		return false; 
 }
 
 
