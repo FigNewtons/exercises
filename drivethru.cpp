@@ -1,9 +1,10 @@
 /*
-	Example Drive-thru Menu
+	Example Drive-thru Order
 	Written by: Fig Newtons 
 	Date: October 23, 2013
 
-	Practice with structs and maps
+	Simulates ordering at the drive-thru of a fast food place. 
+	Uses structs, templates, and maps
 
 */
 
@@ -25,11 +26,23 @@ struct Option
 // Create map to pair menu number with food option
 map <int, Option> menu;
 
+
+// Template for getting user input
+template <typename T, typename U>
+T getInput(U str)
+{
+	T input;
+	cout << str << endl;
+	cin >> input;
+
+	return input;
+}
+
 // Function prototypes
 void displayMenu(map <int, Option>);
-int getOrder();
+void displayReceipt(float, float);
 bool isValidOption(int);
-bool orderDone();
+bool isValidChar(char);
 
 
 int main()
@@ -59,16 +72,36 @@ int main()
 
 
 	// -----Where program starts-----
+	string prompt1 = "Press a valid option number: ";
+	string prompt2 = "Press 'y' for yes or any other character for no: ";
 	bool isOrderDone = false; 
+	float total = 0;
+	const float SALES_TAX = 0.07;
+	
 	do
 	{
 		displayMenu(menu);
-		int option = getOrder();
-		if(!isValidOption(option))
-			cout << "Invalid option entered.\n";
-		isOrderDone = orderDone();
+		int optionNum = getInput <int, string>("What would you like to order? " + prompt1);
+
+		if(!isValidOption(optionNum))
+    		cout << "Invalid option entered.\n";
+		else
+		{
+			char input = getInput <char, string>("Would you like that to be a meal? " + prompt2);
+			if(isValidChar(input))
+				total += menu[optionNum].mealPrice;
+			else
+				total += menu[optionNum].regPrice;
+		}
+
+   		char done = getInput <char, string>("Will that be all today? " + prompt2);
+		if(isValidChar(done))
+			isOrderDone = true;
+		
 	}
 	while(!isOrderDone);
+
+	displayReceipt(total, SALES_TAX);
 
 	return 0;
 }
@@ -83,21 +116,24 @@ void displayMenu(map <int, Option>)
 	cout << "------------------------------------------------------\n";
 	for (int i=1; i < menu.size()+1; i++)
 	{
-		cout << i << ". " << menu[i].name << " " << setw(47- menu[i].name.length()) << "$" << menu[i].regPrice << endl;
-		cout << "   " << menu[i].name << " - Meal" << setw(41- menu[i].name.length()) << "$" << menu[i].mealPrice << endl;
-		
+		cout << i << ". " << menu[i].name << " " << setw(47- menu[i].name.length()) 
+			 << "$" << menu[i].regPrice << endl;
+
+		cout << "   " << menu[i].name << " - Meal" << setw(41- menu[i].name.length()) 
+			 << "$" << menu[i].mealPrice << endl;		
 	}
 }
 
-// Gets the user's option number
-int getOrder()
+void displayReceipt(float total, float tax)
 {
-	int order;
-	cout << "What would you like to order? Press a valid option number: ";
-	cin >> order;
-
-	return order;
+	cout << showpoint << fixed << setprecision(2);
+	cout << "Subtax:        $" << total << endl;
+	cout << "Tax:           $" << total * tax << endl;
+	total = total * (1 + tax);
+	cout << "Your total is: $" << total << endl;
+	cout << "Please come again!" << endl;
 }
+
 
 // Validates user input for number in correct range
 bool isValidOption(int order) 
@@ -108,14 +144,13 @@ bool isValidOption(int order)
 		return true;
 }
 
-bool orderDone()
-{
-	char done;
-	cout << "Will that be all today? Press 'y' for yes or any other character for no: ";
-	cin >> done;
 
-	done = tolower(done);
-	if (done == 'y')
+
+// Validates user input for yes or no 
+bool isValidChar(char input)
+{
+	input = tolower(input);
+	if (input == 'y')
 		return true;
 	else
 		return false; 
