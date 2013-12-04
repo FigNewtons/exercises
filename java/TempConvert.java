@@ -15,6 +15,9 @@ public class TempConvert extends JFrame
 	private final int WINDOW_WIDTH = 400;
 	private final int WINDOW_HEIGHT = 300;
 
+	// Padding default dimension 
+	private Dimension padding = new Dimension(5, 50);
+
 	// Panel and panel objects
 	private JPanel panel; 
 	private JLabel prompt; 
@@ -33,14 +36,14 @@ public class TempConvert extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Label and text field 
-		prompt = new JLabel("Enter the temperature in celsius:");
+		prompt = new JLabel("Enter the temperature in celsius");
 		input = new JTextField(10);
 
 		// Radio buttons
-		fahrenheitBtn = new JRadioButton("Convert to fahrenheit: ");
+		fahrenheitBtn = new JRadioButton("Convert to Fahrenheit");
 		fahrenheitBtn.addActionListener(new ButtonListener());
 
-		kelvinBtn = new JRadioButton("Convert to Kelvin: ");
+		kelvinBtn = new JRadioButton("Convert to Kelvin");
 		kelvinBtn.addActionListener(new ButtonListener());
 
 		// Convert button 
@@ -56,8 +59,10 @@ public class TempConvert extends JFrame
 		panel = new JPanel();
 		panel.add(prompt);
 		panel.add(input);
+		panel.add(new Box.Filler(padding, padding, padding));
 		panel.add(fahrenheitBtn);
 		panel.add(kelvinBtn);
+		panel.add(new Box.Filler(padding, padding, padding));
 		panel.add(btnConvert);
 		add(panel);
 		
