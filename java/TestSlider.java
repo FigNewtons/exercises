@@ -20,6 +20,8 @@ public class TestSlider extends JFrame implements ActionListener, ChangeListener
 	static final int MIN = 0;
 	static final int MAX = 100;	
 	static final int DEFAULT = 50;
+	private final int MAJOR_SPACING = 10;
+	private final int MIN_SPACING = 2;
 
 	// Padding default dimension 
 	private Dimension padding = new Dimension(5, 50);
@@ -46,8 +48,8 @@ public class TestSlider extends JFrame implements ActionListener, ChangeListener
 
 		// Create slider
 		slider = new JSlider(JSlider.HORIZONTAL, MIN, MAX, DEFAULT);
-		slider.setMajorTickSpacing(10);
-		slider.setMinorTickSpacing(2);
+		slider.setMajorTickSpacing(MAJOR_SPACING);
+		slider.setMinorTickSpacing(MIN_SPACING);
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
 		slider.setPreferredSize(new Dimension(WINDOW_WIDTH - 10, WINDOW_HEIGHT / 6));

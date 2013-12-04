@@ -18,6 +18,10 @@ public class TempConvert extends JFrame
 	// Padding default dimension 
 	private Dimension padding = new Dimension(5, 50);
 
+	// Absolute Zero 
+	private final double ABS_ZERO = -273.0;
+	private final double ERROR_TEMP = -274.0;
+
 	// Panel and panel objects
 	private JPanel panel; 
 	private JLabel prompt; 
@@ -36,7 +40,7 @@ public class TempConvert extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Label and text field 
-		prompt = new JLabel("Enter the temperature in celsius");
+		prompt = new JLabel("Enter the temperature in Celsius");
 		input = new JTextField(10);
 
 		// Radio buttons
@@ -91,12 +95,12 @@ public class TempConvert extends JFrame
 			
 
 			// See which radio button is clicked
-			if(fahrenheitBtn.isSelected() && celsius > -274)
+			if(fahrenheitBtn.isSelected() && celsius > ERROR)
 			{
 				result = (9.0 / 5) * celsius + 32;
 				units = " Degrees Fahrenheit";
 			}
-			else if (kelvinBtn.isSelected() && celsius > -274)
+			else if (kelvinBtn.isSelected() && celsius > ERROR)
 			{
 				result = celsius + 273; 
 				units = " Kelvin";
